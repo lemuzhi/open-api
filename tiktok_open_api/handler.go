@@ -6,7 +6,7 @@ type TiktokOpenApi struct {
 	Salt   string
 }
 
-func NewTiktokOpenApi(appid, secret, salt string) *TiktokOpenApi {
+func (*TiktokOpenApi) NewTiktokOpenApi(appid, secret, salt string) *TiktokOpenApi {
 	return &TiktokOpenApi{
 		AppID:  appid,
 		Secret: secret,

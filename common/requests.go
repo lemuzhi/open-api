@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func Requests(url, method string, header map[string]string, params interface{}) (map[string]interface{}, error) {
+func Requests(url, method string, header map[string]string, params interface{}) ([]byte, error) {
 	var req *http.Request
 	var err error
 	client := http.Client{}
@@ -51,14 +51,6 @@ func Requests(url, method string, header map[string]string, params interface{}) 
 		return nil, errors.New("io.ReadAll(resp.Body) error ")
 	}
 	//fmt.Println(string(binaryBody))
+	return binaryBody, err
 
-	data := map[string]interface{}{}
-
-	err = json.Unmarshal(binaryBody, &data)
-	if err != nil {
-		log.Printf("json.Unmarshal error：%v, url: %v, data: %v", err, url, binaryBody)
-		return nil, errors.New("json.Unmarshal(binaryBody, &data) error ")
-	}
-
-	return data, nil
 }

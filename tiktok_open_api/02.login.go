@@ -1,6 +1,11 @@
 package tiktok_open_api
 
-import "fmt"
+import (
+	"encoding/json"
+	"io"
+	"net/http"
+	"net/url"
+)
 
 // 登录相关接口
 
@@ -15,8 +20,37 @@ type Jscode2session struct {
 	} `json:"data"`
 }
 
-func (t *TiktokOpenApi) Jscode2session() {
-	fmt.Println("1======", t.AppID)
-	fmt.Println("2======", t.Secret)
-	fmt.Println("3======", t.Salt)
+func (t *TiktokOpenApi) Jscode2session(code string) (*Jscode2session, error) {
+	u := "https://api.weixin.qq.com/sns/jscode2session"
+
+	param := url.Values{}
+	param.Set("appid", t.AppID)
+	param.Set("secret", t.Secret)
+	param.Set("code", code)
+	p := param.Encode()
+
+	cli := http.Client{}
+
+	req, err := http.NewRequest(http.MethodGet, u+"?"+p, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := cli.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	resb, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var j2s Jscode2session
+	err = json.Unmarshal(resb, &j2s)
+	if err != nil {
+		return nil, err
+	}
+
+	return &j2s, nil
 }

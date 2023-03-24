@@ -2,7 +2,7 @@ package tiktok_open_api
 
 import (
 	"encoding/json"
-	"io"
+	"github.com/lemuzhi/open-api/utils"
 	"net/http"
 	"net/url"
 )
@@ -29,28 +29,9 @@ func (t *TiktokOpenApi) Jscode2session(code string) (*Jscode2session, error) {
 	param.Set("code", code)
 	p := param.Encode()
 
-	cli := http.Client{}
+	res, err := utils.Request(http.MethodGet, u+"?"+p, nil, nil)
 
-	req, err := http.NewRequest(http.MethodGet, u+"?"+p, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := cli.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	resb, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var j2s Jscode2session
-	err = json.Unmarshal(resb, &j2s)
-	if err != nil {
-		return nil, err
-	}
-
-	return &j2s, nil
+	var respData Jscode2session
+	err = json.Unmarshal(*res, &respData)
+	return &respData, err
 }

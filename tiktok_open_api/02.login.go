@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/lemuzhi/open-api/utils"
 	"net/http"
-	"net/url"
 )
 
 // 登录相关接口
@@ -23,13 +22,17 @@ type Jscode2session struct {
 func (t *TiktokOpenApi) Jscode2session(code string) (*Jscode2session, error) {
 	u := "https://developer.toutiao.com/api/apps/v2/jscode2session"
 
-	param := url.Values{}
-	param.Set("appid", t.AppID)
-	param.Set("secret", t.Secret)
-	param.Set("code", code)
-	//p := param.Encode()
+	body := map[string]string{
+		"appid":  t.AppID,
+		"secret": t.Secret,
+		"code":   code,
+	}
 
-	res, err := utils.Request(http.MethodPost, u, nil, param)
+	header := map[string]string{
+		"content-type": "application/json",
+	}
+
+	res, err := utils.Request(http.MethodPost, u, header, body)
 
 	var respData Jscode2session
 	err = json.Unmarshal(*res, &respData)

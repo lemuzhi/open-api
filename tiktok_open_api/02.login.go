@@ -21,15 +21,15 @@ type Jscode2session struct {
 }
 
 func (t *TiktokOpenApi) Jscode2session(code string) (*Jscode2session, error) {
-	u := "https://api.weixin.qq.com/sns/jscode2session"
+	u := "https://developer.toutiao.com/api/apps/v2/jscode2session"
 
 	param := url.Values{}
 	param.Set("appid", t.AppID)
 	param.Set("secret", t.Secret)
 	param.Set("code", code)
-	p := param.Encode()
+	//p := param.Encode()
 
-	res, err := utils.Request(http.MethodGet, u+"?"+p, nil, nil)
+	res, err := utils.Request(http.MethodPost, u, nil, param)
 
 	var respData Jscode2session
 	err = json.Unmarshal(*res, &respData)

@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	appid  = "tta6a9d0143997e46301"
-	secret = "088908088d57fcb413ff8d85eaf135d2c6557456"
-	salt   = "N56SNeRoC5Y9LUWQbtVbrIwACBxi6slvfMzvZ5Pe"
+	appid  = ""
+	secret = ""
+	salt   = ""
 	code   = ""
 )
 

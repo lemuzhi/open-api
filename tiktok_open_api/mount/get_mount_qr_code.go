@@ -1,4 +1,4 @@
-package tiktok_open_api
+package mount
 
 import (
 	"encoding/json"
@@ -6,9 +6,7 @@ import (
 	"net/http"
 )
 
-// 挂载相关接口
-
-type ShortVideoMount struct {
+type ShortVideoMountResp struct {
 	ErrNo  int    `json:"err_no"`
 	ErrMsg string `json:"err_msg"`
 	Data   struct {
@@ -17,7 +15,7 @@ type ShortVideoMount struct {
 	} `json:"data"`
 }
 
-func (t *TiktokOpenApi) ShortVideoMount(accessToken string) (*ShortVideoMount, error) {
+func (t *Mount) ShortVideoMount(accessToken string) (*ShortVideoMountResp, error) {
 	u := "https://developer.toutiao.com/api/apps/v1/capacity/get_self_mount_bind_qrcode"
 
 	header := map[string]string{
@@ -29,7 +27,7 @@ func (t *TiktokOpenApi) ShortVideoMount(accessToken string) (*ShortVideoMount, e
 		return nil, err
 	}
 
-	var respData ShortVideoMount
+	var respData ShortVideoMountResp
 	err = json.Unmarshal(*body, &respData)
 	return &respData, err
 }

@@ -1,14 +1,13 @@
-package tiktok_open_api
+package login
 
 import (
 	"encoding/json"
+	"github.com/lemuzhi/open-api/global"
 	"github.com/lemuzhi/open-api/utils"
 	"net/http"
 )
 
-// 登录相关接口
-
-type Jscode2session struct {
+type code2sessionResp struct {
 	ErrNo   int    `json:"err_no"`
 	ErrTips string `json:"err_tips"`
 	Data    struct {
@@ -19,12 +18,12 @@ type Jscode2session struct {
 	} `json:"data"`
 }
 
-func (t *TiktokOpenApi) Jscode2session(code string) (*Jscode2session, error) {
+func (t *Login) Jscode2session(code string) (*code2sessionResp, error) {
 	u := "https://developer.toutiao.com/api/apps/v2/jscode2session"
 
 	body := map[string]string{
-		"appid":  t.AppID,
-		"secret": t.Secret,
+		"appid":  global.AppID,
+		"secret": global.Secret,
 		"code":   code,
 	}
 
@@ -34,7 +33,7 @@ func (t *TiktokOpenApi) Jscode2session(code string) (*Jscode2session, error) {
 
 	res, err := utils.Request(http.MethodPost, u, header, body)
 
-	var respData Jscode2session
+	var respData code2sessionResp
 	err = json.Unmarshal(*res, &respData)
 	return &respData, err
 }

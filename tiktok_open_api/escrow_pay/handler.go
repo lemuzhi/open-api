@@ -4,4 +4,5 @@ package escrow_pay
 
 type EscrowPay struct {
 	Pay
+	OrderPush
 }

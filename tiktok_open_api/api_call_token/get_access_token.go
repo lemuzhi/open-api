@@ -5,7 +5,6 @@ import (
 	"github.com/lemuzhi/open-api/global"
 	"github.com/lemuzhi/open-api/utils"
 	"net/http"
-	"net/url"
 )
 
 type GetAccessTokenResp struct {
@@ -14,6 +13,7 @@ type GetAccessTokenResp struct {
 	Data    struct {
 		AccessToken string `json:"access_token"`
 		ExpiresIn   int    `json:"expires_in"`
+		ExpiresAt   int    `json:"expires_at"`
 	} `json:"data"`
 }
 
@@ -21,12 +21,16 @@ type GetAccessTokenResp struct {
 func (t *ApiCallToken) GetAccessToken() (*GetAccessTokenResp, error) {
 	u := "https://developer.toutiao.com/api/apps/v2/token"
 
-	param := url.Values{}
-	param.Set("appid", global.AppID)
-	param.Set("secret", global.Secret)
-	param.Set("grant_type", "client_credential")
+	header := map[string]string{
+		"content-type": "application/json",
+	}
+	params := map[string]string{
+		"appid":      global.AppID,
+		"secret":     global.Secret,
+		"grant_type": "client_credential",
+	}
 
-	body, err := utils.Request(http.MethodPost, u, nil, param)
+	body, err := utils.Request(http.MethodPost, u, header, params)
 	if err != nil {
 		return nil, err
 	}
